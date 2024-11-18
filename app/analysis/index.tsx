@@ -16,12 +16,18 @@ function Analysis({
   chartData,
   getCodeEvaluation,
   setMessages,
+  messages,
+  threadId,
+  setChartData,
 }: {
   setDisableEditor: React.Dispatch<React.SetStateAction<boolean>>;
   setCode: React.Dispatch<React.SetStateAction<string>>;
   chartData: ChartData[];
   getCodeEvaluation: () => void;
   setMessages: React.Dispatch<React.SetStateAction<BaseMessage[]>>;
+  messages: BaseMessage[];
+  threadId: string;
+  setChartData: React.Dispatch<React.SetStateAction<ChartData[]>>;
 }) {
   const [openSheet, setOpenSheet] = React.useState(false);
   const [sheetContent, setSheetContent] = React.useState<ChartData | undefined>(
@@ -43,10 +49,9 @@ function Analysis({
       setCode("");
       toast.success("Question has been fed successfully");
       setMessages(res.messages);
+      setChartData([]);
     },
   });
-
-  console.log("UPDATING");
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -58,7 +63,11 @@ function Analysis({
 
   return (
     <div className="p-6 flex flex-col gap-6 overflow-y-auto">
-      <QuestionCard submitQuestion={submitQuestion} setCode={setCode} />
+      <QuestionCard
+        submitQuestion={submitQuestion}
+        messages={messages}
+        threadId={threadId}
+      />
       <AnalysisChart
         setOpenSheet={setOpenSheet}
         setSheetContent={setSheetContent}

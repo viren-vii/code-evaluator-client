@@ -14,6 +14,7 @@ type FinalOutput = {
 export type ModelResponse = {
   messages: BaseMessage[];
   final_output: FinalOutput;
+  thread_id: string;
 };
 
 export type ChartData = {

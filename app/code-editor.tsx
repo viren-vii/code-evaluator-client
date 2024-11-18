@@ -19,8 +19,8 @@ const CodeEditor = ({
     <Editor
       height="100%"
       width="100%"
+      value={code}
       defaultLanguage="python"
-      defaultValue={code}
       onChange={handleEditorChange}
       options={{
         readOnly: disableEditor,

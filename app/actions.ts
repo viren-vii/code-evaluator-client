@@ -10,7 +10,7 @@ export async function getStatus() {
   return res.json();
 }
 
-async function initBot() {
+export async function initBot() {
   const res: ModelResponse = await (
     await fetch(`${SERVER_URL}/init`, {
       method: "POST",
@@ -20,20 +20,26 @@ async function initBot() {
       body: JSON.stringify({}),
     })
   ).json();
+  console.log("========== BOT INITIALIZED ==========");
   return res;
 }
 
-export async function feedQuestion(question: string) {
-  const initResponse = await initBot();
-  console.log("========== BOT INITIALIZED ==========");
-  const messages = initResponse.messages;
+export async function feedQuestion({
+  question,
+  messages,
+  thread_id,
+}: {
+  question: string;
+  messages: BaseMessage[];
+  thread_id: string;
+}) {
   const res: ModelResponse = await (
     await fetch(`${SERVER_URL}/feed-question`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ question, messages }),
+      body: JSON.stringify({ question, messages, thread_id }),
     })
   ).json();
   return res;
@@ -42,23 +48,23 @@ export async function feedQuestion(question: string) {
 export async function getEvaluation({
   messages,
   code,
+  thread_id,
 }: {
   messages: BaseMessage[];
   code: string;
+  thread_id: string;
 }) {
   console.log("========== EVALUATING ==========");
-  console.log(messages, code);
   const res: ModelResponse = await (
     await fetch(`${SERVER_URL}/evaluate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ messages, user_code_snippet: code }),
+      body: JSON.stringify({ messages, user_code_snippet: code, thread_id }),
     })
   ).json();
 
   console.log("========== EVALUATION DONE ==========");
-  console.log(res.final_output);
   return res;
 }

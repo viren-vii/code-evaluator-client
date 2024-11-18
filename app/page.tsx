@@ -5,7 +5,7 @@ import Analysis from "./analysis";
 import CodeEditor from "./code-editor";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
-import { getEvaluation } from "./actions";
+import { getEvaluation, initBot } from "./actions";
 import { BaseMessage } from "@langchain/core/messages";
 import { ChartData } from "./analysis/types";
 import { toast } from "sonner";
@@ -37,12 +37,12 @@ export default function Home() {
 
   const [messages, setMessages] = React.useState<BaseMessage[]>([]);
   const [chartData, setChartData] = React.useState<ChartData[]>([]);
+  const [threadId, setThreadId] = React.useState<string>("");
 
   const { mutate: getCodeEvaluation } = useMutation({
     mutationFn: async () => {
-      console.log(prevCode, code, disableEditor);
       if (prevCode === code || disableEditor) return;
-      const res = await getEvaluation({ messages, code });
+      const res = await getEvaluation({ messages, code, thread_id: threadId });
       return res;
     },
     onError: (error) => {
@@ -65,6 +65,24 @@ export default function Home() {
     },
   });
 
+  const { mutate: init } = useMutation({
+    mutationFn: async () => {
+      const res = await initBot();
+      return res;
+    },
+    onSuccess(res) {
+      setMessages(res.messages);
+      toast.success("Bot initialized");
+      if (res.thread_id) setThreadId(res.thread_id);
+    },
+  });
+
+  React.useEffect(() => {
+    init();
+  }, []);
+
+  console.log(code);
+
   return (
     <>
       <Tool />
@@ -85,6 +103,9 @@ export default function Home() {
             chartData={chartData}
             getCodeEvaluation={getCodeEvaluation}
             setMessages={setMessages}
+            messages={messages}
+            threadId={threadId}
+            setChartData={setChartData}
           />
         </div>
       </div>

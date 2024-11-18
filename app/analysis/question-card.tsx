@@ -18,13 +18,24 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Textarea } from "@/components/ui/textarea";
 import React from "react";
+import { BaseMessage } from "@langchain/core/messages";
 
 const QuestionCard = ({
   submitQuestion,
-  setCode,
+  messages,
+  threadId,
 }: {
-  submitQuestion: (question: string) => void;
-  setCode: React.Dispatch<React.SetStateAction<string>>;
+  submitQuestion: ({
+    question,
+    messages,
+    thread_id,
+  }: {
+    question: string;
+    messages: BaseMessage[];
+    thread_id: string;
+  }) => void;
+  messages: BaseMessage[];
+  threadId: string;
 }) => {
   const [question, setQuestion] = React.useState("");
   const [open, setOpen] = React.useState(false);
@@ -43,8 +54,7 @@ const QuestionCard = ({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                submitQuestion(question);
-                setCode("");
+                submitQuestion({ question, messages, thread_id: threadId });
               }}>
               Continue
             </AlertDialogAction>
@@ -63,7 +73,11 @@ const QuestionCard = ({
           />
         </CardContent>
         <CardFooter>
-          <Button onClick={() => setOpen(true)}>Submit</Button>
+          <Button
+            disabled={question === "" || messages.length === 0}
+            onClick={() => setOpen(true)}>
+            Submit
+          </Button>
         </CardFooter>
       </Card>
     </>
