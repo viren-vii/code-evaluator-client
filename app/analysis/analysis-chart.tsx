@@ -23,20 +23,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ChartData } from "./types";
+import { ChartLineIcon } from "lucide-react";
 
 const ImproveColor = "#10b981";
 const DeclineColor = "#ef4444";
-
-const StatusLabel = ({ status }: { status: "up" | "down" }) => {
-  const color =
-    status === "up" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
-  return (
-    <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${color}`}>
-      {status === "up" ? "Improving" : "Declining"}
-    </span>
-  );
-};
 
 const chartConfig = {
   score: {
@@ -81,20 +71,14 @@ export function AnalysisChart({
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
-            <CardTitle>Improvement analysis</CardTitle>
+            <CardTitle>
+              <div className="flex items-center gap-1">
+                <ChartLineIcon className="w-4 h-4" />
+                <span>Improvement analysis</span>
+              </div>
+            </CardTitle>
             <CardDescription>
-              {chartData?.length >= 2 ? (
-                <>
-                  <StatusLabel
-                    status={
-                      chartData[chartData.length - 1].improving ? "up" : "down"
-                    }
-                  />
-                  <span className="ml-1">in code quality</span>
-                </>
-              ) : (
-                "Enter the question and start writing code to see the analysis"
-              )}
+              Click on any point on the chart to see the details
             </CardDescription>
           </div>
           <div className="flex flex-col gap-1">
@@ -126,9 +110,9 @@ export function AnalysisChart({
             margin={{
               left: 12,
               right: 12,
+              top: 18,
             }}
             onClick={(payload) => {
-              console.log("CLICKED");
               if (payload && payload.activePayload?.[0].payload) {
                 setOpenSheet(true);
                 setSheetContent(payload.activePayload[0].payload);

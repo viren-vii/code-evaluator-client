@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { feedQuestion } from "../actions";
 import { ChartData } from "./types";
 import { BaseMessage } from "@langchain/core/messages";
+import DetailsCard from "./details-cards";
 
 function Analysis({
   setDisableEditor,
@@ -67,6 +68,9 @@ function Analysis({
         submitQuestion={submitQuestion}
         messages={messages}
         threadId={threadId}
+      />
+      <DetailsCard
+        currentPoint={chartData[chartData.length - 1] || undefined}
       />
       <AnalysisChart
         setOpenSheet={setOpenSheet}

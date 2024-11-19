@@ -9,6 +9,7 @@ type FinalOutput = {
   status: string;
   score: number;
   comment: string;
+  hint: string;
 };
 
 export type ModelResponse = {
@@ -24,4 +25,5 @@ export type ChartData = {
   code: string;
   time: string;
   improving: boolean;
+  hint: string;
 };

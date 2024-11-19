@@ -18,14 +18,6 @@ const TitleBar = ({ title }: { title: string }) => {
   );
 };
 
-const Tool = () => {
-  return (
-    <div className="fixed top-5 left-5">
-      <Button size={"sm"}>eval</Button>
-    </div>
-  );
-};
-
 let prevCode = "";
 
 export default function Home() {
@@ -43,7 +35,8 @@ export default function Home() {
     mutationFn: async () => {
       if (prevCode === code || disableEditor) return;
       const res = await getEvaluation({ messages, code, thread_id: threadId });
-      return res;
+      const codeUsed = code;
+      return { data: res, codeUsed };
     },
     onError: (error) => {
       console.error(error);
@@ -51,14 +44,14 @@ export default function Home() {
     },
     onSuccess(res) {
       if (!res) return;
-      setMessages(res.messages);
+      setMessages(res.data.messages);
       setChartData((prev) => [
         ...prev,
         {
-          code,
+          code: res.codeUsed,
           time: new Date().toLocaleTimeString(),
-          ...res.final_output,
-          improving: res.final_output.score > prev[prev.length - 1]?.score,
+          ...res.data.final_output,
+          improving: res.data.final_output.score > prev[prev.length - 1]?.score,
         },
       ]);
       prevCode = code;
@@ -85,7 +78,6 @@ export default function Home() {
 
   return (
     <>
-      <Tool />
       <div className="h-full flex justify-between">
         <div className="flex flex-1 flex-col border-r-[1px]">
           <TitleBar title="Code editor" />

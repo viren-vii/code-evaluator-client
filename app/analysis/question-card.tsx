@@ -19,6 +19,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import React from "react";
 import { BaseMessage } from "@langchain/core/messages";
+import { MessageCircleQuestion } from "lucide-react";
 
 const QuestionCard = ({
   submitQuestion,
@@ -63,7 +64,11 @@ const QuestionCard = ({
       </AlertDialog>
       <Card>
         <CardHeader>
-          <CardTitle>Question</CardTitle>
+          <CardTitle>
+            <div className="flex items-center gap-1">
+              <MessageCircleQuestion className="w-4 h-4" /> Question
+            </div>
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <Textarea

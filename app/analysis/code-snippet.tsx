@@ -26,7 +26,20 @@ const CodeSnippet = ({
       }}>
       <SheetContent className="min-w-[40vw]">
         <SheetHeader>
-          <SheetTitle>Code snippet and analysis</SheetTitle>
+          <SheetTitle>
+            <div className="flex items-center gap-1">
+              Code snippet and analysis
+              {sheetContent?.improving ? (
+                <p className="text-green-500 text-sm p-1 px-3 bg-green-500/10 rounded-3xl">
+                  Improving
+                </p>
+              ) : (
+                <p className="text-red-500 text-sm p-1 px-3 bg-red-500/10 rounded-3xl">
+                  Not improving
+                </p>
+              )}
+            </div>
+          </SheetTitle>
           <SheetDescription>
             {sheetContent && (
               <div className="flex flex-col gap-1">
@@ -41,6 +54,9 @@ const CodeSnippet = ({
                 <p>
                   <span className="font-black">Comment</span>:{" "}
                   {sheetContent.comment}
+                </p>
+                <p>
+                  <span className="font-black">Hint</span>: {sheetContent.hint}
                 </p>
                 <p>
                   <span className="font-black">Time</span>: {sheetContent.time}
