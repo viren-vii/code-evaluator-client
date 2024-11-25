@@ -3,7 +3,6 @@
 import React from "react";
 import Analysis from "./analysis";
 import CodeEditor from "./code-editor";
-import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { getEvaluation, initBot } from "./actions";
 import { BaseMessage } from "@langchain/core/messages";
@@ -73,8 +72,6 @@ export default function Home() {
   React.useEffect(() => {
     init();
   }, []);
-
-  console.log(code);
 
   return (
     <>
